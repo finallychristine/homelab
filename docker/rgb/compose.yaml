@@ -1,0 +1,18 @@
+name: bear-server
+include:
+  - ../network.yml
+services:
+  rgb:
+    extends:
+      file: ../service.yml
+      service: base
+    container_name: rgb
+    build:
+      context: https://github.com/jurkovic-nikola/OpenLinkHub.git#0.6.5
+    hostname: rgb.vip.bear-network
+    privileged: true # Sads, but needed since it reads a ton of hardware stuff :(
+    volumes:
+      - ./config.json:/opt/OpenLinkHub/config.json
+      - rgb_database:/opt/OpenLinkHub/database
+volumes:
+  rgb_database:

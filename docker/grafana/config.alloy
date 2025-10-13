@@ -1,0 +1,104 @@
+/** Global **/
+
+livedebugging {
+    enabled = true
+}
+
+logging {
+    // level  = "debug"
+}
+
+loki.write "local" {
+  endpoint {
+    url = "http://loki.vip.bear-network/loki/api/v1/push"
+  }
+}
+
+/** Docker **/
+discovery.docker "logs_integrations_docker" {
+    host             = "unix:///var/run/docker.sock"
+    refresh_interval = "5s"
+}
+
+discovery.relabel "logs_integrations_docker" {
+    targets = []
+
+    rule {
+        target_label = "job"
+        replacement  = "integrations/docker"
+    }
+
+    rule {
+        target_label = "instance"
+        replacement  = constants.hostname
+    }
+
+    rule {
+        source_labels = ["__meta_docker_container_name"]
+        regex         = "/(.*)"
+        target_label  = "container"
+    }
+
+    rule {
+        source_labels = ["__meta_docker_container_log_stream"]
+        target_label  = "stream"
+    }
+}
+
+loki.source.docker "logs_integrations_docker" {
+    host             = "unix:///var/run/docker.sock"
+    targets          = discovery.docker.logs_integrations_docker.targets
+    forward_to       = [loki.write.local.receiver]
+    relabel_rules    = discovery.relabel.logs_integrations_docker.rules
+    refresh_interval = "5s"
+}
+
+/** Plex **/
+
+local.file_match "plex" {
+    path_targets = [
+        {
+            "__path__" = "/container-logs/plex/*.log",
+            __path_exclude__ = "/container-logs/plex/*[0-9].log",
+            "service_name" = "plex",
+        },
+        {
+            "__path__" = "/container-logs/plex/PMS Plugin Logs",
+            "service_name" = "plex",
+        },
+    ]
+    sync_period  = "5s"
+}
+
+loki.source.file "plex" {
+    targets    = local.file_match.plex.targets
+    forward_to = [loki.process.plex.receiver]
+    tail_from_end = true
+}
+
+
+loki.process "plex" {
+    forward_to = [loki.write.local.receiver]
+
+    stage.regex {
+        expression = "^(?s)(?P<time>.*) \\[([0-9]+)\\] (?P<level>[A-Z]+) - (?P<content>.*)$"
+    }
+    stage.timestamp {
+        source = "time"
+        format = "Jan 02, 2006 15:04:05.000"
+        location = "America/Los_Angeles"
+    }
+    stage.template {
+        source = "level"
+        template = "{{ ToLower .Value }}"
+    }
+    stage.labels {
+        values = {
+            level = "",
+        }
+    }
+    stage.output {
+        source = "content"
+    }
+}
+

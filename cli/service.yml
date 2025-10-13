@@ -1,0 +1,3 @@
+services:
+  __base:
+    restart: no

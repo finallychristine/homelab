@@ -1,0 +1,32 @@
+{
+  "amdGpuIndex": 0,
+  "amdsmiPath": "",
+  "checkDevicePermission": true,
+  "cpuSensorChip": "coretemp",
+  "cpuTempFile": "",
+  "debug": false,
+  "decodeMemorySku": false,
+  "defaultNvidiaGPU": 0,
+  "enableOpenRGBTargetServer": false,
+  "enhancementKits": [],
+  "exclude": [],
+  "frontend": true,
+  "graphProfiles": true,
+  "listenAddress": "0.0.0.0",
+  "listenPort": 27003,
+  "logFile": "-",
+  "logLevel": "debug",
+  "manual": false,
+  "memory": true,
+  "memorySku": "CMH32GX5M2B6000C40",
+  "memorySmBus": "i2c-3",
+  "memoryType": 5,
+  "metrics": true,
+  "nvidiaGpuIndex": [
+    0
+  ],
+  "openRGBPort": 6743,
+  "ramTempViaHwmon": true,
+  "resumeDelay": 15000,
+  "temperatureOffset": 0
+}

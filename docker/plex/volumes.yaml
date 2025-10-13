@@ -1,0 +1,3 @@
+volumes:
+  plex_config:
+  plex_logs:

@@ -1,0 +1,21 @@
+name: bear-server
+include:
+  - ../network.yml
+services:
+  ddns:
+    extends:
+      file: ../service.yml
+      service: base
+    image: qmcgaw/ddns-updater
+    container_name: ddns
+    hostname: ddns.vip.bear-network
+    environment:
+      - LISTENING_ADDRESS=:8000
+      - ROOT_URL=/
+    volumes:
+      - ddns_data:/updater/data
+      - ./config.json:/updater/data/config.json:ro
+    healthcheck:
+      disable: true
+volumes:
+  ddns_data:

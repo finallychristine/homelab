@@ -1,0 +1,30 @@
+name: bear-server
+include:
+  - ../network.yml
+  - ../plex/volumes.yaml
+  - ../homeassistant/volumes.yaml
+services:
+  smb:
+    extends:
+      file: ../service.yml
+      service: base
+    image: dockurr/samba
+    container_name: smb
+    hostname: smb.vip.bear-network
+    environment:
+      NAME: "shares"
+      USER: "samba"
+      PASS: "secret"
+      RW: false
+    ports:
+    - "445:445"
+    secrets:
+      - source: smb-password
+        target: pass
+    volumes:
+      - plex_config:/storage/plex_config:ro
+      - homeassistant-config:/storage/homeassistant-config:ro
+      - ./smb.conf:/etc/samba/smb.conf
+secrets:
+  smb-password:
+    file: ../../secrets/smb-password

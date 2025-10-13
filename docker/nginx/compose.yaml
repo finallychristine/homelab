@@ -1,0 +1,38 @@
+name: bear-server
+include:
+  - ../network.yml
+  - ../certbot/volumes.yaml
+services:
+  nginx:
+    extends:
+      file: ../service.yml
+      service: base
+    image: nginx:latest
+    container_name: nginx
+    hostname: nginx.vip.bear-network
+    volumes:
+      - ./etcnginx:/etc/nginx:ro
+      - certs:/etc/letsencrypt:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      nginx-dnsmasq:
+        condition: service_started
+        restart: true
+  nginx-dnsmasq:
+    extends:
+      file: ../service.yml
+      service: base
+    image: dockurr/dnsmasq
+    container_name: nginx-dnsmasq
+    hostname: nginx-dns.vip.bear-network
+    extra_hosts:
+      # needed so we have access to docker host, aka home-assistant
+      - "host.docker.internal:host-gateway"
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - ./dnsmasq.conf:/etc/dnsmasq.conf

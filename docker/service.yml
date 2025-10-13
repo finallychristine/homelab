@@ -1,0 +1,26 @@
+services:
+  __base:
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    environment:
+      - TZ=America/Los_Angeles
+    extra_hosts:
+      - "storage-den.vip.bear-network:192.168.1.229"
+  base-host-network:
+    extends:
+      service: __base
+    network_mode: host
+    # manual vips to localhost
+    extra_hosts:
+      - "influxdb2.vip.bear-network:127.0.0.1"
+  base:
+    extends:
+      service: __base
+    networks:
+      - bear-network
+  base-misc:
+    extends:
+      service: __base
+    networks:
+      - bear-network-misc

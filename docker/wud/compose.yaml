@@ -1,0 +1,16 @@
+name: bear-server
+include:
+  - ../network.yml
+services:
+  wud:
+    extends:
+      file: ../service.yml
+      service: base
+    image: getwud/wud:latest
+    container_name: wud
+    hostname: wud.vip.bear-network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - wud_store:/store
+volumes:
+  wud_store:

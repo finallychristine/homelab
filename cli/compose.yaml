@@ -1,0 +1,8 @@
+name: cli
+services:
+  speedtest:
+    extends:
+      file: service.yml
+      service: __base
+    image: gists/speedtest-cli
+    container_name: speedtest-cli

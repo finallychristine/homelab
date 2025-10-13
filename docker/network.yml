@@ -1,0 +1,8 @@
+networks:
+  bear-network:
+    name: bear-network
+    enable_ipv6: true
+  # isolated from other networks
+  bear-network-misc:
+    name: bear-network-misc
+    enable_ipv6: true

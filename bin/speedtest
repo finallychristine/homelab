@@ -1,0 +1,2 @@
+#!/bin/bash
+docker compose -f cli/compose.yaml run --remove-orphans --name speedtest-cli speedtest

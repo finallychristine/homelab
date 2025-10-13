@@ -1,0 +1,22 @@
+name: bear-server
+include:
+  - ../network.yml
+  - volumes.yaml
+services:
+  certbot:
+    extends:
+      file: ../service.yml
+      service: __base
+    build: .
+    container_name: certbot
+    volumes:
+      - certs:/etc/letsencrypt
+    secrets:
+      - cloudflare_credentials
+    networks:
+      - bear-network
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+secrets:
+  cloudflare_credentials:
+    file: ../../secrets/certbot-cloudflare-credentials.ini

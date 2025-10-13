@@ -1,0 +1,17 @@
+name: bear-server
+include:
+  - ../network.yml
+  - volumes.yaml
+services:
+  homeassistant:
+    extends:
+      file: ../service.yml
+      service: base-host-network
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - homeassistant-config:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    labels:
+      - docker-volume-backup.stop-during-backup=true

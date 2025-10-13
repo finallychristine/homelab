@@ -1,0 +1,22 @@
+name: bear-server
+include:
+  - ../network.yml
+services:
+  portainer:
+    extends:
+      file: ../service.yml
+      service: base
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    hostname: portainer.vip.bear-network
+    volumes:
+      - portainer-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - VIRTUAL_HOST=portainer.localhost
+      - VIRTUAL_PORT=80
+      - TRUSTED_ORIGINS=portainer.waller.beartree.me
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+volumes:
+  portainer-data:

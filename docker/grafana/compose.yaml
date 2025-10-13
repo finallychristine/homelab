@@ -1,0 +1,110 @@
+name: bear-server
+include:
+  - ../network.yml
+  - ../plex/volumes.yaml
+services:
+  grafana:
+    extends:
+      file: ../service.yml
+      service: base
+    image: grafana/grafana-oss:latest
+    hostname: grafana.vip.bear-network
+    container_name: grafana
+    environment:
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+      GF_PATHS_PROVISIONING: "/etc/grafana/provisioning"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana.ini:/etc/grafana/grafana.ini
+      - ./grafana-datasource.yaml:/etc/grafana/provisioning/datasources/ds.yaml
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  loki:
+    extends:
+      file: ../service.yml
+      service: base
+    image: grafana/loki:latest
+    container_name: loki
+    hostname: loki.vip.bear-network
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - loki-data:/loki
+      - ./loki-config.yaml:/etc/loki/local-config.yaml
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  alloy:
+    extends:
+      file: ../service.yml
+      service: base
+    image:  grafana/alloy:latest
+    container_name: alloy
+    hostname: alloy.vip.bear-network
+    command: [
+      "run",
+      "--server.http.listen-addr=0.0.0.0:80",
+      "--storage.path=/var/lib/alloy/data",
+      "/etc/alloy/config.alloy",
+    ]
+    volumes:
+      - alloy_data:/var/lib/alloy/data
+      - ./config.alloy:/etc/alloy/config.alloy
+      - /var/run/docker.sock:/var/run/docker.sock
+      - plex_logs:/container-logs/plex
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  influxdb2:
+    extends:
+      file: ../service.yml
+      service: base
+    image: influxdb:2
+    container_name: influxdb2
+    hostname: influxdb2.vip.bear-network
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USE  RNAME_FILE: /run/secrets/influxdb2-admin-username
+      DOCKER_INFLUXDB_INIT_PASSWORD_FILE: /run/secrets/influxdb2-admin-password
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN_FILE: /run/secrets/influxdb2-admin-token
+      DOCKER_INFLUXDB_INIT_ORG: primary
+      DOCKER_INFLUXDB_INIT_BUCKET: bearserver
+      INFLUXD_HTTP_BIND_ADDRESS: ":80"
+    secrets:
+      - influxdb2-admin-username
+      - influxdb2-admin-password
+      - influxdb2-admin-token
+    volumes:
+      - influxdb2-data:/var/lib/influxdb2
+      - influxdb2-config:/etc/influxdb2
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+  telegraf:
+    extends:
+      file: ../service.yml
+      service: base
+    image: telegraf:latest
+    container_name: telegraf
+    hostname: telegraf.vip.bear-network
+    secrets:
+      - source: influxdb2-admin-token
+        target: admin_token
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    group_add:
+      - 988 # to read docker sock
+    labels:
+      - docker-volume-backup.stop-during-backup=true
+secrets:
+  influxdb2-admin-username:
+    file: ../../secrets/influxdb2/admin-username
+  influxdb2-admin-password:
+    file: ../../secrets/influxdb2/admin-password
+  influxdb2-admin-token:
+    file: ../../secrets/influxdb2/admin-token
+volumes:
+  grafana-data:
+  loki-data:
+  alloy_data:
+  influxdb2-data:
+  influxdb2-config:

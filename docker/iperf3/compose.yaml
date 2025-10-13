@@ -1,0 +1,14 @@
+name: bear-server
+include:
+  - ../network.yml
+services:
+  iperf3:
+    extends:
+      file: ../service.yml
+      service: base-misc
+    image: networkstatic/iperf3
+    container_name: iperf3
+    hostname: iperf3.vip.bear-network-misc
+    ports:
+      - "5201:5201"
+    command: "-s" # run as server
