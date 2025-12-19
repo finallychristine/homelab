@@ -1,0 +1,22 @@
+name: bear-server
+include:
+  - ../network.yml
+  - ../grafana/secrets.yaml
+services:
+  unifi-poller:
+    extends:
+      file: ../service.yml
+      service: base
+    image: ghcr.io/unpoller/unpoller:latest
+    container_name: unifi-poller
+    hostname: unifi-poller.vip.bear-network
+    volumes:
+      - ./up.conf:/etc/unpoller/up.conf
+    secrets:
+      - influxdb2-admin-username
+      - influxdb2-admin-password
+      - influxdb2-admin-token
+      - unifi-udm-poller-password
+secrets:
+  unifi-udm-poller-password:
+    file: ../../secrets/unifi-udm-poller-password

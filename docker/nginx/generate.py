@@ -51,6 +51,8 @@ proxies: list[Proxy] = [
     Proxy(name = "rgb", port=27003),
     Proxy(name = "nas", port=5001, upstream_override="storage-den.vip.bear-network", insecure_https_upstream = True),
     Proxy(name = "backups", port=9898),
+    Proxy(name = "uptime", port=3001),
+    Proxy(name = "adguard", port=3000),
 ]
 
 for proxy in proxies:

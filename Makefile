@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 
 PROJECTS ?= certbot grafana homeassistant nginx plex portainer wud smb nut ddns \
-	iperf3 rgb
+	iperf3 rgb uptime
 
 .PHONY: rebuild
 rebuild: ## Builds & deploys with latest configs

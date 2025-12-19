@@ -2,6 +2,7 @@ name: bear-server
 include:
   - ../network.yml
   - ../plex/volumes.yaml
+  - ./secrets.yaml
 services:
   grafana:
     extends:
@@ -95,13 +96,6 @@ services:
       - 988 # to read docker sock
     labels:
       - docker-volume-backup.stop-during-backup=true
-secrets:
-  influxdb2-admin-username:
-    file: ../../secrets/influxdb2/admin-username
-  influxdb2-admin-password:
-    file: ../../secrets/influxdb2/admin-password
-  influxdb2-admin-token:
-    file: ../../secrets/influxdb2/admin-token
 volumes:
   grafana-data:
   loki-data:

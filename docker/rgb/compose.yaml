@@ -8,7 +8,7 @@ services:
       service: base
     container_name: rgb
     build:
-      context: https://github.com/jurkovic-nikola/OpenLinkHub.git#0.6.5
+      context: https://github.com/jurkovic-nikola/OpenLinkHub.git#0.6.8
     hostname: rgb.vip.bear-network
     privileged: true # Sads, but needed since it reads a ton of hardware stuff :(
     volumes:

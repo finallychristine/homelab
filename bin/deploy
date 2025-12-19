@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+import logging
+import os.path
+import sys
+import subprocess
+
+import typer
+from typing_extensions import Annotated
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
+
+default_projects = ["certbot", "grafana", "homeassistant", "nginx", "plex", "portainer", "wud", "smb", "nut", "ddns", "iperf3", "rgb"]
+
+working_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), "..", "docker"))
+environment = os.getenv("ENVIRONMENT") or "dev"
+
+
+app = typer.Typer()
+
+@app.command()
+def clean():
+    pass
+
+@app.command()
+def upgrade(
+    projects: Annotated[list[str], typer.Option()] = default_projects,
+):
+    logger.info("Upgrading projects...")
+    run_docker_compose(projects, "pull", join_files=True)
+    # note: do I want --force-recreate?
+    run_docker_compose(projects, "up", additional_args=["--build", "--detach"])
+    subprocess.run(["docker", "image", "prune"], cwd=working_dir, stdout=sys.stdout)
+
+
+def run_docker_compose(projects: list[str], cmd: str, additional_args: list[str] = list(), join_files = False):
+    if join_files:
+        logger.info(f"[{projects}] Running `docker compose {cmd}`")
+        args = ["docker", "compose"] + get_compose_file_args(projects) + [cmd] + additional_args
+        subprocess.run(args, cwd=working_dir, stdout=sys.stdout)
+    else:
+        for project in projects:
+            logger.info(f"[{project}] Running `docker compose {cmd}`")
+            args = ["docker", "compose"] + get_compose_file_args([project]) + [cmd] + additional_args
+            cwd = os.path.join(working_dir, project)
+            subprocess.run(args, cwd=cwd, stdout=sys.stdout)
+
+def get_compose_file_args(projects: list[str]) -> list[str]:
+    args = list[str]()
+
+    for project in projects:
+        project_file = os.path.join(working_dir, project, "compose.yaml")
+        env_override_file = os.path.join(working_dir, project, f"compose.{environment}.env")
+
+        if not os.path.isfile(project_file):
+            raise RuntimeError(f"Project '{project}' does not have a compose.yaml file")
+
+        args.append("-f")
+        args.append(project_file)
+
+        if os.path.isfile(env_override_file):
+            args.append("-f")
+            args.append(env_override_file)
+
+
+    return args
+
+if __name__ == '__main__':
+    app()
+
+

@@ -1,0 +1,24 @@
+name: bear-server
+include:
+  - ../network.yml
+services:
+  postfix:
+    extends:
+      file: ../service.yml
+      service: base
+    image: boky/postfix:latest
+    container_name: postfix
+    hostname: postfix.vip.bear-network
+    environment:
+      POSTFIX_myhostname: postfix-docker
+      RELAYHOST: smtp.protonmail.ch
+      RELAYHOST_USERNAME: hello@christine.fyi
+      RELAYHOST_PASSWORD_FILE: /run/secrets/postfix_proton_token
+      ALLOWED_SENDER_DOMAINS: christine.fyi
+    ports:
+      - "587:587"
+    secrets:
+      - postfix_proton_token
+secrets:
+  postfix_proton_token:
+    file: ../../secrets/postfix-proton-token

@@ -1,0 +1,15 @@
+name: bear-server
+include:
+  - ../network.yml
+services:
+  uptime:
+    extends:
+      file: ../service.yml
+      service: base
+    image: louislam/uptime-kuma:2
+    container_name: uptime
+    hostname: uptime.vip.bear-network
+    volumes:
+      - uptime-data:/app/data
+volumes:
+  uptime-data:
