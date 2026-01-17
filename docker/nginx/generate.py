@@ -41,12 +41,12 @@ class Proxy:
 proxies: list[Proxy] = [
     Proxy(name = "grafana"),
     Proxy(name = "influxdb2"),
-    Proxy(name = "homeassistant", subdomain_override="ha", upstream_override="host.docker.internal", port=8123),
+    Proxy(name = "homeassistant", subdomain_override="ha", port=8123), # upstream_override="host.docker.internal"
     Proxy(name = "alloy"),
     Proxy(name = "loki"),
     Proxy(name = "portainer", port=9000),
     Proxy(name = "wud", port=3000),
-    Proxy(name = "plex", port=32400, upstream_override="host.docker.internal"),
+    # Proxy(name = "plex", port=32400, upstream_override="host.docker.internal"),
     Proxy(name = "ddns", port=8000),
     # Proxy(name = "rgb", port=27003),
     Proxy(name = "nas", port=5001, upstream_override="storage-den.vip.bear-network", insecure_https_upstream = True),
