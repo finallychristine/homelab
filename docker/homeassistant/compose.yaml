@@ -15,3 +15,32 @@ services:
       - /run/dbus:/run/dbus:ro
     labels:
       - docker-volume-backup.stop-during-backup=true
+  mqtt:
+    extends:
+      file: ../service.yml
+      service: base
+    container_name: mqtt
+    hostname: mqtt.vip.bear-network
+    image: "eclipse-mosquitto:latest"
+    ports:
+      - "9001" # websockets
+    volumes:
+      - ./mqtt.conf:/mosquitto/config/mosquitto.conf
+      - mqtt-data:/mosquitto/data
+    secrets:
+      - mqtt-password
+  mqttui:
+    extends:
+      file: ../service.yml
+      service: base
+    container_name: mqttui
+    hostname: mqttui.vip.bear-network
+    image: "ghcr.io/thomasnordquist/mqtt-explorer:latest"
+    volumes:
+      - mqttui-data:/app/data
+volumes:
+  mqtt-data:
+  mqttui-data:
+secrets:
+  mqtt-password:
+    file: ../../secrets/mqtt-internal-password
