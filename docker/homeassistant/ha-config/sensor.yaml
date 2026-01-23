@@ -1,0 +1,8 @@
+- name: "Emporia Utility Connect Energy"
+  unique_id: "emporia_utility_connect_energy"
+  source: "sensor.emporia_utility_connect_power"
+  platform: integration
+  method: trapezoidal
+  round: 2
+  max_sub_interval:
+    minutes: 5

@@ -48,11 +48,8 @@ proxies: list[Proxy] = [
     Proxy(name = "wud", port=3000),
     # Proxy(name = "plex", port=32400, upstream_override="host.docker.internal"),
     Proxy(name = "ddns", port=8000),
-    # Proxy(name = "rgb", port=27003),
     Proxy(name = "nas", port=5001, upstream_override="storage-den.vip.bear-network", insecure_https_upstream = True),
-    # Proxy(name = "backups", port=9898),
     Proxy(name = "uptime", port=3001),
-    # Proxy(name = "adguard", port=3000),
     Proxy(name = "mqtt", port=9001),
     Proxy(name = "mqttui", port=3000),
 ]

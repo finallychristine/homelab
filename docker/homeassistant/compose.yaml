@@ -12,6 +12,8 @@ services:
     image: "ghcr.io/home-assistant/home-assistant:stable"
     volumes:
       - homeassistant-config:/config
+      - ./ha-config:/config/ha-config
+      - ./ha-config.yaml:/config/configuration.yaml
       - /etc/localtime:/etc/localtime:ro
       - /run/dbus:/run/dbus:ro
     networks:
@@ -19,6 +21,10 @@ services:
         ipv4_address: 192.168.1.100
     labels:
       - docker-volume-backup.stop-during-backup=true
+    secrets:
+      - source: homeassistant-secrets
+        target: /config/secrets.yaml
+
   mqtt:
     extends:
       file: ../service.yml
@@ -28,11 +34,13 @@ services:
     image: "eclipse-mosquitto:latest"
     ports:
       - "9001" # websockets
+      - "1883:1883"
     volumes:
       - ./mqtt.conf:/mosquitto/config/mosquitto.conf
       - mqtt-data:/mosquitto/data
     secrets:
       - mqtt-password
+
   mqttui:
     extends:
       file: ../service.yml
@@ -42,9 +50,22 @@ services:
     image: "ghcr.io/thomasnordquist/mqtt-explorer:latest"
     volumes:
       - mqttui-data:/app/data
+
+  vuegraf:
+    extends:
+      file: ../service.yml
+      service: base
+    container_name: vuegraf
+    hostname: vuegraf.vip.bear-network
+    image: "jertel/vuegraf:latest"
+    volumes:
+      - ./vuegraf.json:/opt/vuegraf/conf/vuegraf.json
+
 volumes:
   mqtt-data:
   mqttui-data:
 secrets:
+  homeassistant-secrets:
+    file: ../../secrets/homeassistant.yaml
   mqtt-password:
     file: ../../secrets/mqtt-internal-password

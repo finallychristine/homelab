@@ -15,7 +15,5 @@ services:
     volumes:
       - ddns_data:/updater/data
       - ./config.json:/updater/data/config.json:ro
-    healthcheck:
-      disable: true
 volumes:
   ddns_data:

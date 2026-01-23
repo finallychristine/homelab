@@ -1,0 +1,33 @@
+### Default HA provided things, do not touch
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+
+### Custom additions
+mqtt: !include ha-config/mqtt.yaml
+sensor: !include ha-config/sensor.yaml
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 172.18.0.0/24
+    - fdfb:cf0d:5f79::/64
+
+influxdb:
+  api_version: 2
+  host: influxdb2.vip.bear-network
+  port: 80
+  ssl: false
+  token: !secret influx-password
+  bucket: homeassistant
+  organization: primary
