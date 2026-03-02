@@ -1,0 +1,53 @@
+blueprint:
+  name: AQI
+  description: Converts PM2.5 to AQI
+  domain: template
+  input:
+    reference_entity:
+      name: PM2.5
+      selector:
+        entity:
+          domain: sensor
+variables:
+  reference_entity: !input reference_entity
+sensor:
+  name: AQI
+  state_class: measurement
+  device_class: aqi
+  availability: "{{ states(reference_entity) not in ('unknown', 'unavailable') }}"
+  state: >
+    {% macro aqi(val, val_l, val_h, aqi_l, aqi_h) -%}
+      {{(((aqi_h-aqi_l)/(val_h - val_l) * (val - val_l)) + aqi_l)|round(0)}}
+    {%- endmacro %}
+    {% set v = states(reference_entity)|round(1) %}
+    {% if v <= 9.0 %}
+       {{aqi(v, 0, 9.0, 0, 50)}}
+    {% elif 9.0 < v <= 35.4 %}
+       {{aqi(v, 9.1, 35.4, 51, 100)}}
+    {% elif 35.4 < v <= 55.4 %}
+       {{aqi(v, 35.5, 55.4, 101, 150)}}
+    {% elif 55.4 < v <= 125.4 %}
+       {{aqi(v, 55.5, 125.4, 151, 200)}}
+    {% elif 125.4 < v <= 225.4 %}
+       {{aqi(v, 125.5, 225.4, 201, 300)}}
+    {% elif 250.5 < v <= 500.4 %}
+       {{aqi(v, 250.5, 500.4, 301, 500)}}
+    {% else %}
+       500
+    {% endif %}
+  attributes:
+    interpretation: >
+      {% set aqi = this.state |round(1) %}
+      {% if aqi <= 50 %}
+         Good
+      {% elif aqi <= 100 %}
+         Moderate
+      {% elif aqi <= 150 %}
+         Unhealthy for Sensitive Groups
+      {% elif aqi <= 200 %}
+         Unhealthy
+      {% elif aqi <= 300 %}
+         Very Unhealthy
+      {% else %}
+         Hazardous
+      {% endif %}

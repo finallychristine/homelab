@@ -1,8 +1,8 @@
 .DEFAULT_GOAL := help
 
 # rgb plex
-DEFAULT_PROJECTS = certbot grafana homeassistant nginx portainer wud smb nut ddns \
-		iperf3 uptime
+DEFAULT_PROJECTS = certbot monitoring homeassistant nginx portainer wud smb nut ddns \
+		iperf3 uptime booklore backups unifi-poller
 SERVICE ?=
 
 ifeq ($(PROJECTS), all)
@@ -31,11 +31,18 @@ upgrade: _check_projects_variable ## Pulls images & rebuilds
 	make rebuild
 	make clean
 
-.PHONY: deploy
-deploy: _check_projects_variable ## Brings up everything
+.PHONY: up
+up: _check_projects_variable ## Brings up everything
 	@for project in ${_PROJECTS}; do \
   		echo "Bringing up project $$project"; \
-  		make _compose CMD="up" PROJECT="$$project" FLAGS="-d"; \
+  		make _compose CMD="up" PROJECT="$$project"; \
+	done
+
+.PHONY: stop
+stop: _check_projects_variable ## Stops everything
+	@for project in ${_PROJECTS}; do \
+  		echo "Stopping project $$project"; \
+  		make _compose CMD="stop" PROJECT="$$project"; \
 	done
 
 .PHONY: _compose

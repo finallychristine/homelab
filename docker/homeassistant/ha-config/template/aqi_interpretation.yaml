@@ -1,0 +1,30 @@
+blueprint:
+  name: AQI Interpretation
+  description: Interprets AQI into a human friendly state
+  domain: template
+  input:
+    reference_entity:
+      name: AQI
+      selector:
+        entity:
+          domain: sensor
+variables:
+  reference_entity: !input reference_entity
+sensor:
+  name: AQI Interpretation
+  availability: "{{ states(reference_entity) not in ('unknown', 'unavailable') }}"
+  state: >
+    {% set aqi = states(reference_entity)|round(1) %}
+    {% if aqi <= 50 %}
+       Good
+    {% elif aqi <= 100 %}
+       Moderate
+    {% elif aqi <= 150 %}
+       Unhealthy for Sensitive Groups
+    {% elif aqi <= 200 %}
+       Unhealthy
+    {% elif aqi <= 300 %}
+       Very Unhealthy
+    {% else %}
+       Hazardous
+    {% endif %}

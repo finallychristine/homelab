@@ -1,26 +1,35 @@
 services:
-  __base:
+  base-no-network:
     restart: unless-stopped
     stdin_open: true
     tty: true
+    # Local logging driver prevents disk exhaustion if a service
+    # goes crazy with spamming too many logs
+    logging:
+      driver: local
     environment:
       - TZ=America/Los_Angeles
     extra_hosts:
       - "storage-den.vip.bear-network:192.168.1.229"
   base-host-network:
     extends:
-      service: __base
+      service: base-no-network
     network_mode: host
     # manual vips to localhost
     extra_hosts:
-      - "influxdb2.vip.bear-network:127.0.0.1"
+      - "influxdb.vip.bear-network:127.0.0.1"
   base:
     extends:
-      service: __base
+      service: base-no-network
     networks:
       - bear-network
+#  basev6:
+#    extends:
+#      service: base-no-network
+#    networks:
+#      - bear-network-ipv6
   base-misc:
     extends:
-      service: __base
+      service: base-no-network
     networks:
       - bear-network-misc

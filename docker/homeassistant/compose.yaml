@@ -2,6 +2,7 @@ name: bear-server
 include:
   - ../network.yml
   - volumes.yaml
+  - ../certbot/volumes.yaml
 services:
   homeassistant:
     extends:
@@ -38,6 +39,7 @@ services:
     volumes:
       - ./mqtt.conf:/mosquitto/config/mosquitto.conf
       - mqtt-data:/mosquitto/data
+      - certs:/etc/letsencrypt:ro
     secrets:
       - mqtt-password
 
@@ -50,16 +52,6 @@ services:
     image: "ghcr.io/thomasnordquist/mqtt-explorer:latest"
     volumes:
       - mqttui-data:/app/data
-
-  vuegraf:
-    extends:
-      file: ../service.yml
-      service: base
-    container_name: vuegraf
-    hostname: vuegraf.vip.bear-network
-    image: "jertel/vuegraf:latest"
-    volumes:
-      - ./vuegraf.json:/opt/vuegraf/conf/vuegraf.json
 
 volumes:
   mqtt-data:

@@ -7,14 +7,6 @@
       "ip_version": "ipv4",
       "token": "n7NAD0yfy7eK9RBK75vN6yt-aRFFFosHGw8pxfML",
       "ttl": 1
-    },
-    {
-      "provider": "cloudflare",
-      "domain": "ext-waller.beartree.me",
-      "zone_identifier": "e3530c119baa8bf0314d227656c82507",
-      "ip_version": "ipv6",
-      "token": "n7NAD0yfy7eK9RBK75vN6yt-aRFFFosHGw8pxfML",
-      "ttl": 1
     }
   ]
 }

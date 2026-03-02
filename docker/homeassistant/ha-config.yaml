@@ -16,6 +16,7 @@ scene: !include scenes.yaml
 ### Custom additions
 mqtt: !include ha-config/mqtt.yaml
 sensor: !include ha-config/sensor.yaml
+template: !include ha-config/template.yaml
 
 http:
   use_x_forwarded_for: true
@@ -25,9 +26,10 @@ http:
 
 influxdb:
   api_version: 2
-  host: influxdb2.vip.bear-network
-  port: 80
   ssl: false
+  host: influxdb.vip.bear-network
+  port: 8181
+  organization: primairy
   token: !secret influx-password
   bucket: homeassistant
-  organization: primary
+  measurement_attr: entity_id

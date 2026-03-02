@@ -1,0 +1,29 @@
+name: bear-server
+include:
+  - ../network.yml
+  - ../../secrets/nas_storage.yaml
+
+  # Other service Volumes
+  - ../booklore/volumes.yaml
+  - ../homeassistant/volumes.yaml
+services:
+  backups:
+    container_name: backups
+    hostname: backups.vip.bear-network
+    extends:
+      file: ../service.yml
+      service: base-no-network
+    image: offen/docker-volume-backup:latest
+    environment:
+      BACKUP_FILENAME: backup-%Y-%m-%dT%H-%M-%S.tar.gz
+      BACKUP_PRUNING_PREFIX: backup-
+      BACKUP_RETENTION_DAYS: 7
+    # entrypoint: backup # uncommeont for one-off
+    volumes:
+      # Setup
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - nas-backups:/archive
+
+      # Other Service backups
+      - booklore-mariadb-storage:/backup/booklore-mariadb-storage:ro
+      - homeassistant-config:/backup/homeassistant-config:ro

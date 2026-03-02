@@ -3,6 +3,6 @@ services:
   speedtest:
     extends:
       file: service.yml
-      service: __base
+      service: base-no-network
     image: gists/speedtest-cli
     container_name: speedtest-cli

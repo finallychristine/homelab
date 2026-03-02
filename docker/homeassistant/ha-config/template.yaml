@@ -1,0 +1,12 @@
+- name: Christine Office AQI
+  unique_id: air_quality_christine_office_aqi
+  use_blueprint:
+    path: /config/ha-config/template/aqi.yaml
+    input:
+      reference_entity: sensor.air_quality_christine_office_pm2_5
+- name: Christine Office AQI Interpretation
+  unique_id: air_quality_christine_office_aqi_interpretation
+  use_blueprint:
+    path: /config/ha-config/template/aqi_interpretation.yaml
+    input:
+      reference_entity: sensor.christine_office_aqi

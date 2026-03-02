@@ -1,7 +1,7 @@
 name: bear-server
 include:
   - ../network.yml
-  - ../grafana/secrets.yaml
+  - ../monitoring/secrets.yaml
 services:
   unifi-poller:
     extends:
@@ -13,9 +13,6 @@ services:
     volumes:
       - ./up.conf:/etc/unpoller/up.conf
     secrets:
-      - influxdb2-admin-username
-      - influxdb2-admin-password
-      - influxdb2-admin-token
       - unifi-udm-poller-password
 secrets:
   unifi-udm-poller-password:

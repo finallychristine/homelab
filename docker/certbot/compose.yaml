@@ -6,7 +6,7 @@ services:
   certbot:
     extends:
       file: ../service.yml
-      service: __base
+      service: base-no-network
     build: .
     container_name: certbot
     volumes:
@@ -15,8 +15,6 @@ services:
       - cloudflare_credentials
     networks:
       - bear-network
-    labels:
-      - docker-volume-backup.stop-during-backup=true
 secrets:
   cloudflare_credentials:
     file: ../../secrets/certbot-cloudflare-credentials.ini

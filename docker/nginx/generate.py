@@ -40,7 +40,7 @@ class Proxy:
 
 proxies: list[Proxy] = [
     Proxy(name = "grafana"),
-    Proxy(name = "influxdb2"),
+    Proxy(name = "influxdb-ui", subdomain_override="influxdb"),
     Proxy(name = "homeassistant", subdomain_override="ha", port=8123), # upstream_override="host.docker.internal"
     Proxy(name = "alloy"),
     Proxy(name = "loki"),
@@ -52,6 +52,8 @@ proxies: list[Proxy] = [
     Proxy(name = "uptime", port=3001),
     Proxy(name = "mqtt", port=9001),
     Proxy(name = "mqttui", port=3000),
+    Proxy(name = "booklore", port=6060),
+    Proxy(name = "cockpit", upstream_override="host.docker.internal", port=9090),
 ]
 
 for proxy in proxies:
