@@ -1,4 +1,3 @@
 data/
 .gitsecret/keys/random_seed
 !*.secret
-secrets/
