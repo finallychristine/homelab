@@ -1,5 +1,5 @@
-services:
-  homeassistant:
-    devices:
-      - "/dev/serial/by-id/usb-dresden_elektronik_ConBee_III_DE03216884-if00-port0:/dev/serial/by-id/conbee"
-      - "/dev/ttyAMA0:/dev/serial/by-id/conbee-ama"
+#services:
+#  homeassistant:
+#    devices:
+#      #- "/dev/serial/by-id/usb-dresden_elektronik_ConBee_III_DE03216884-if00-port0:/dev/serial/by-id/conbee"
+#      #- "/dev/ttyAMA0:/dev/serial/by-id/conbee-ama"

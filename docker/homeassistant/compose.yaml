@@ -25,6 +25,9 @@ services:
     secrets:
       - source: homeassistant-secrets
         target: /config/secrets.yaml
+    # To access serial USB
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   mqtt:
     extends:

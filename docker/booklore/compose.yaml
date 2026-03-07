@@ -12,6 +12,9 @@ services:
     container_name: booklore
     image: booklore/booklore:latest
     environment:
+      # Don't run as root
+      - APP_USER_ID=1000
+      - APP_GROUP_ID=1000
       - DATABASE_URL=jdbc:mariadb://booklore-mariadb.vip.bear-network:3306/booklore   # Only modify this if you're familiar with JDBC and your database setup
       - DATABASE_USERNAME=booklore                          # Must match MYSQL_USER defined in the mariadb container
       - DATABASE_PASSWORD=your_secure_password              # Use a strong password; must match MYSQL_PASSWORD defined in the mariadb container

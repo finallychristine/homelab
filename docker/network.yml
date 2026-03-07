@@ -18,6 +18,7 @@ networks:
     enable_ipv6: false
     driver_opts:
       parent: "enp0s5"
+      macvlan_mode: vepa
     ipam:
       config:
         - subnet: "192.168.1.0/24"
