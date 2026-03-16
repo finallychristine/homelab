@@ -11,13 +11,11 @@ services:
       - TZ=America/Los_Angeles
     extra_hosts:
       - "storage-den.vip.bear-network:192.168.1.229"
+      - "homeassistant.vip.bear-network:192.168.1.41"
   base-host-network:
     extends:
       service: base-no-network
     network_mode: host
-    # manual vips to localhost
-    extra_hosts:
-      - "influxdb.vip.bear-network:127.0.0.1"
   base:
     extends:
       service: base-no-network

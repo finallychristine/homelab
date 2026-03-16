@@ -16,6 +16,8 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
       GF_PATHS_PROVISIONING: "/etc/grafana/provisioning"
+    secrets:
+      - influxdb-admin-token-text
     volumes:
       - grafana-data:/var/lib/grafana
       - ./grafana.ini:/etc/grafana/grafana.ini
@@ -64,16 +66,22 @@ services:
       - --object-store=file
       - --data-dir=/var/lib/influxdb3/data
       - --admin-token-file=/run/secrets/influxdb-admin-token
+    healthcheck:
+      test: ["CMD-SHELL", 'curl --header "Authorization: Bearer $(cat /var/run/secrets/influxdb-admin-token-text)" http://localhost:8181/health']
+      interval: 10s
+      timeout: 5s
+      retries: 3
     environment: {}
       # uncomment to set up
-      #INFLUXDB3_ENTERPRISE_LICENSE_TYPE: home
-      #INFLUXDB3_ENTERPRISE_LICENSE_EMAIL: example@example.com
+      # INFLUXDB3_ENTERPRISE_LICENSE_TYPE: home
+      # INFLUXDB3_ENTERPRISE_LICENSE_EMAIL: example@example.com
     ulimits:
       nofile:
         soft: 4096
         hard: 4096
     secrets:
       - influxdb-admin-token
+      - influxdb-admin-token-text
     volumes:
       - influxdb3-data:/var/lib/influxdb3
       - influxdb3-plugins:/var/lib/influxdb3/plugins
@@ -96,7 +104,8 @@ services:
     container_name: telegraf
     hostname: telegraf.vip.bear-network
     secrets:
-      - influxdb-admin-token
+      - source: influxdb-admin-token-text
+        target: influxdb_token
     volumes:
       - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
       - /var/run/docker.sock:/var/run/docker.sock

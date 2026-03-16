@@ -17,14 +17,15 @@ services:
       - ./ha-config.yaml:/config/configuration.yaml
       - /etc/localtime:/etc/localtime:ro
       - /run/dbus:/run/dbus:ro
-    networks:
-      bear-network-macvlan:
-        ipv4_address: 192.168.1.100
     labels:
       - docker-volume-backup.stop-during-backup=true
     secrets:
       - source: homeassistant-secrets
         target: /config/secrets.yaml
+    ports:
+      # Sonos callback
+      - "1400:1400"
+      - "1401:1401"
     # To access serial USB
     extra_hosts:
       - "host.docker.internal:host-gateway"
@@ -56,9 +57,20 @@ services:
     volumes:
       - mqttui-data:/app/data
 
+  matter:
+    extends:
+      file: ../service.yml
+      service: base
+    container_name: matter
+    hostname: matter.vip.bear-network
+    image: ghcr.io/matter-js/python-matter-server:stable
+    volumes:
+      - matter-data:/data
+
 volumes:
   mqtt-data:
   mqttui-data:
+  matter-data:
 secrets:
   homeassistant-secrets:
     file: ../../secrets/homeassistant.yaml

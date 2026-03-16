@@ -21,15 +21,14 @@ template: !include ha-config/template.yaml
 http:
   use_x_forwarded_for: true
   trusted_proxies:
+    - 127.0.0.1
     - 172.18.0.0/24
     - fdfb:cf0d:5f79::/64
+    - fd1c:a36d:f7aa::/64
 
-influxdb:
-  api_version: 2
-  ssl: false
-  host: influxdb.vip.bear-network
-  port: 8181
-  organization: primairy
-  token: !secret influx-password
-  bucket: homeassistant
-  measurement_attr: entity_id
+sonos:
+  media_player:
+    advertise_addr: ha.waller.beartree.me
+    hosts:
+      # appears to be the primairy controller?
+      - sonos-arc.iot

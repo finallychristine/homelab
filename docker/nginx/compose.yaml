@@ -32,6 +32,9 @@ services:
     extra_hosts:
       # needed so we have access to docker host, aka home-assistant
       - "host.docker.internal:host-gateway"
+    networks:
+      bear-network:
+        ipv4_address: 172.18.0.100
     cap_add:
       - NET_ADMIN
     volumes:

@@ -6,7 +6,7 @@ services:
     extends:
       file: ../service.yml
       service: base
-    image: louislam/uptime-kuma:2
+    image: louislam/uptime-kuma:2.1.3 # but with 2.2
     container_name: uptime
     hostname: uptime.vip.bear-network
     volumes:
