@@ -54,6 +54,9 @@ services:
     container_name: mqttui
     hostname: mqttui.vip.bear-network
     image: "ghcr.io/thomasnordquist/mqtt-explorer:latest"
+    environment:
+      MQTT_EXPLORER_USERNAME: user
+      MQTT_EXPLORER_PASSWORD: ed3fbf89-24bc-4593-b512-8759023f511e
     volumes:
       - mqttui-data:/app/data
 
@@ -66,6 +69,16 @@ services:
     image: ghcr.io/matter-js/python-matter-server:stable
     volumes:
       - matter-data:/data
+
+#  purpleair-to-mqtt:
+#    extends:
+#      file: ../service.yml
+#      service: base
+#    container_name: purpleair-to-mqtt
+#    hostname: purpleair-to-mqtt.vip.bear-network
+#    image: cdzombak/purpleair2mqtt
+#    volumes:
+#      - ./purpleair2mqtt.toml:/config.toml
 
 volumes:
   mqtt-data:

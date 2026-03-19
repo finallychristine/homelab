@@ -10,7 +10,7 @@ services:
       service: base
     hostname: booklore.vip.bear-network
     container_name: booklore
-    image: booklore/booklore:latest
+    image: grimmory/grimmory:latest
     environment:
       # Don't run as root
       - APP_USER_ID=1000
