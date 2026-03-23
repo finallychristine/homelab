@@ -38,6 +38,13 @@ up: _check_projects_variable ## Brings up everything
   		make _compose CMD="up" PROJECT="$$project"; \
 	done
 
+.PHONY: restart
+restart: _check_projects_variable ## Restarts everything
+	@for project in ${_PROJECTS}; do \
+  		echo "Restarting project $$project"; \
+  		make _compose CMD="restart" PROJECT="$$project"; \
+	done
+
 .PHONY: stop
 stop: _check_projects_variable ## Stops everything
 	@for project in ${_PROJECTS}; do \

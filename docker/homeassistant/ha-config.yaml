@@ -28,7 +28,7 @@ http:
 
 sonos:
   media_player:
-    advertise_addr: ha.waller.beartree.me
+    advertise_addr: ha.beartree.me
     hosts:
       # appears to be the primairy controller?
       - sonos-arc.iot

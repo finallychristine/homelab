@@ -25,7 +25,7 @@ services:
       - PGID=1000
       - VERSION=docker
       - PLEX_CLAIM=claim-bmP5AQLsSWRNKeVWvFGx
-      - ADVERTISE_IP=http://plex.waller.beartree.me:32400/
+      - ADVERTISE_IP=http://plex.beartree.me:32400/
     volumes:
       - plex_config:/config
       - plex_media:/data
