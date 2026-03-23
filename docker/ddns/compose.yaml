@@ -14,6 +14,11 @@ services:
       - ROOT_URL=/
     volumes:
       - ddns_data:/updater/data
-      - ./config.json:/updater/data/config.json:ro
+    secrets:
+      - source: ddns_config
+        target: /updater/data/config.json
 volumes:
   ddns_data:
+secrets:
+  ddns_config:
+    file: ../../secrets/ddns.json
