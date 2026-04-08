@@ -1,0 +1,10 @@
+[mqtt.default]
+version = 5
+host = "mqtt.vip.bear-network"
+port = 1883
+username = "admin"
+password.value = "HQUUgUnWvR444xunNC@a7MKjrdPJ7pdk"
+
+[devices.default]
+host = "http://192.168.1.142"
+servers = ["default"]

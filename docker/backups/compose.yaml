@@ -27,3 +27,4 @@ services:
       # Other Service backups
       - booklore-mariadb-storage:/backup/booklore-mariadb-storage:ro
       - homeassistant-config:/backup/homeassistant-config:ro
+      - esphome-data:/backup/esphome-data:ro

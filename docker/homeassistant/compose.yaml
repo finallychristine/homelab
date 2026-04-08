@@ -39,11 +39,9 @@ services:
     image: "eclipse-mosquitto:latest"
     ports:
       - "9001" # websockets
-      - "1883:1883"
     volumes:
       - ./mqtt.conf:/mosquitto/config/mosquitto.conf
       - mqtt-data:/mosquitto/data
-      - certs:/etc/letsencrypt:ro
     secrets:
       - mqtt-password
 
@@ -60,6 +58,18 @@ services:
     volumes:
       - mqttui-data:/app/data
 
+  esphome:
+    extends:
+      file: ../service.yml
+      service: base
+    container_name: esphome
+    hostname: esphome.vip.bear-network
+    image: ghcr.io/esphome/esphome
+    environment:
+      ESPHOME_DASHBOARD_USE_PING: true
+    volumes:
+      - esphome-data:/config
+
   matter:
     extends:
       file: ../service.yml
@@ -70,15 +80,17 @@ services:
     volumes:
       - matter-data:/data
 
-#  purpleair-to-mqtt:
-#    extends:
-#      file: ../service.yml
-#      service: base
-#    container_name: purpleair-to-mqtt
-#    hostname: purpleair-to-mqtt.vip.bear-network
-#    image: cdzombak/purpleair2mqtt
-#    volumes:
-#      - ./purpleair2mqtt.toml:/config.toml
+  purpleair-to-mqtt:
+    extends:
+      file: ../service.yml
+      service: base
+    container_name: purpleair-to-mqtt
+    hostname: purpleair-to-mqtt.vip.bear-network
+    image: finallychristine/purpleair-to-mqtt:latest
+    volumes:
+      - ./purpleair2mqtt.toml:/app/config.toml
+    secrets:
+      - mqtt-password
 
 volumes:
   mqtt-data:

@@ -2,24 +2,7 @@ networks:
   bear-network:
     name: bear-network
     enable_ipv6: true
-#  bear-network-ipv6:
-#    name: bear-network
-#    enable_ipv6: true
-#    ipam:
-#      config:
-#        - subnet:
   # isolated from other networks
   bear-network-misc:
     name: bear-network-misc
     enable_ipv6: true
-  bear-network-macvlan:
-    name: bear-network-macvlan
-    driver: macvlan
-    enable_ipv6: false
-    driver_opts:
-      parent: "en0"
-      # macvlan_mode: vepa
-    ipam:
-      config:
-        - subnet: "192.168.1.0/24"
-          gateway: "192.168.1.1"

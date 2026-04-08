@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 
-# rgb plex
-DEFAULT_PROJECTS = certbot monitoring homeassistant nginx portainer wud smb nut ddns \
+# rgb plex nut
+DEFAULT_PROJECTS = certbot monitoring homeassistant nginx portainer wud smb ddns \
 		iperf3 uptime booklore backups unifi-poller
 SERVICE ?=
 

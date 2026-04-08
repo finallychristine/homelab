@@ -15,7 +15,10 @@ services:
       - certs:/etc/letsencrypt:ro
     ports:
       - "80:80"
-      - "443:443"
+      - "443:443/tcp"
+      - "443:443/udp" # http3/quic
+      - "1883:1883" # MQTT, unencrypted
+      - "8883:8883" # MQTT, encrypted
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:

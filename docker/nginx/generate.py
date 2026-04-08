@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from dataclasses import dataclass, asdict
 from string import Template
 
@@ -50,10 +50,11 @@ proxies: list[Proxy] = [
     Proxy(name = "ddns", port=8000),
     Proxy(name = "nas", port=5001, upstream_override="storage-den.vip.bear-network", insecure_https_upstream = True),
     Proxy(name = "uptime", port=3001),
-    Proxy(name = "mqtt", port=9001),
+    Proxy(name = "mqtt", port=9001), # Websocket only
     Proxy(name = "mqttui", port=3000),
-    Proxy(name = "booklore", port=6060),
+    # Proxy(name = "booklore", port=6060), # Having temporary issues
     Proxy(name = "cockpit", upstream_override="host.docker.internal", port=9090),
+    Proxy(name = "esphome", port=6052),
 ]
 
 for proxy in proxies:
