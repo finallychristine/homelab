@@ -3,6 +3,7 @@ include:
   - ../network.yml
   - ../plex/volumes.yaml
   - ./secrets.yaml
+  - ../uptime/secrets.yaml
 services:
   grafana:
     extends:
@@ -51,70 +52,25 @@ services:
       - ./config.alloy:/etc/alloy/config.alloy
       - /var/run/docker.sock:/var/run/docker.sock
       - plex_logs:/container-logs/plex
-  influxdb:
+  prometheus:
     extends:
       file: ../service.yml
       service: base
-    image: influxdb:3-enterprise
-    container_name: influxdb
-    hostname: influxdb.vip.bear-network
+    image: prom/prometheus
+    container_name: prometheus
+    hostname: prometheus.vip.bear-network
     command:
-      - influxdb3
-      - serve
-      - --node-id=primary-node
-      - --cluster-id=primary-cluster
-      - --object-store=file
-      - --data-dir=/var/lib/influxdb3/data
-      - --admin-token-file=/run/secrets/influxdb-admin-token
-    healthcheck:
-      test: ["CMD-SHELL", 'curl --header "Authorization: Bearer $(cat /var/run/secrets/influxdb-admin-token-text)" http://localhost:8181/health']
-      interval: 10s
-      timeout: 5s
-      retries: 3
-    environment: {}
-      # uncomment to set up
-      # INFLUXDB3_ENTERPRISE_LICENSE_TYPE: home
-      # INFLUXDB3_ENTERPRISE_LICENSE_EMAIL: example@example.com
-    ulimits:
-      nofile:
-        soft: 4096
-        hard: 4096
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.retention.time=90d'
+      - '--storage.tsdb.retention.size=100GB'
+      - '--log.level=debug'
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
     secrets:
-      - influxdb-admin-token
-      - influxdb-admin-token-text
-    volumes:
-      - influxdb3-data:/var/lib/influxdb3
-      - influxdb3-plugins:/var/lib/influxdb3/plugins
-  influxdb-ui:
-    extends:
-      file: ../service.yml
-      service: base
-    image: influxdata/influxdb3-ui:latest
-    container_name: influxdb-ui
-    hostname: influxdb-ui.vip.bear-network
-    command:
-      - --mode=admin
-    volumes:
-      - influxdb-ui-db:/db
-  telegraf:
-    extends:
-      file: ../service.yml
-      service: base
-    image: telegraf:latest
-    container_name: telegraf
-    hostname: telegraf.vip.bear-network
-    secrets:
-      - source: influxdb-admin-token-text
-        target: influxdb_token
-    volumes:
-      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-    group_add:
-      - 988 # to read docker sock
+      - uptime-api-key
 volumes:
   grafana-data:
   loki-data:
   alloy_data:
-  influxdb3-data:
-  influxdb3-plugins:
-  influxdb-ui-db:
+  prometheus_data:

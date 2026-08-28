@@ -1,0 +1,25 @@
+global:
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: homeassistant
+    metrics_path: /api/prometheus
+    static_configs:
+      - targets: ["homeassistant.vip.bear-network:8123"]
+
+  - job_name: 'unifipoller'
+    static_configs:
+      - targets: ["unifi-poller.vip.bear-network:9130"]
+
+  - job_name: 'telegraf'
+    static_configs:
+      - targets: ["telegraf.vip.bear-network:9273"]
+
+  - job_name: 'uptime'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ["uptime.vip.bear-network:3001"]
+    basic_auth:
+      password_file: /run/secrets/uptime-api-key

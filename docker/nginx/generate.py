@@ -40,7 +40,7 @@ class Proxy:
 
 proxies: list[Proxy] = [
     Proxy(name = "grafana"),
-    Proxy(name = "influxdb-ui", subdomain_override="influxdb"),
+    Proxy(name = "prometheus", port=9090),
     Proxy(name = "homeassistant", subdomain_override="ha", port=8123), # upstream_override="host.docker.internal"
     Proxy(name = "alloy"),
     Proxy(name = "loki"),

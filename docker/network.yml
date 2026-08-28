@@ -6,3 +6,10 @@ networks:
   bear-network-misc:
     name: bear-network-misc
     enable_ipv6: true
+  # Carries only mDNS traffic reflected between Home Assistant and the LAN.
+  network-discovery:
+    name: network-discovery
+    enable_ipv6: true
+    driver_opts:
+      # The reflector uses this host-side bridge while running in host mode.
+      com.docker.network.bridge.name: br-mdns

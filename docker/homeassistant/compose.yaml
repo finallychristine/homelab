@@ -4,13 +4,27 @@ include:
   - volumes.yaml
   - ../certbot/volumes.yaml
 services:
+  mdns-relay:
+    extends:
+      file: ../service.yml
+      service: base-no-network
+    container_name: mdns-relay
+    image: "finallychristine/docker-mdns-relay:latest"
+    networks:
+      - network-discovery
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   homeassistant:
     extends:
       file: ../service.yml
       service: base
     container_name: homeassistant
     hostname: homeassistant.vip.bear-network
-    image: "ghcr.io/home-assistant/home-assistant:beta"
+    image: "ghcr.io/home-assistant/home-assistant:latest"
+    networks:
+      - bear-network
+      - network-discovery
     volumes:
       - homeassistant-config:/config
       - ./ha-config:/config/ha-config

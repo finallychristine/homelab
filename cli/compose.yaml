@@ -6,3 +6,16 @@ services:
       service: base-no-network
     image: gists/speedtest-cli
     container_name: speedtest-cli
+
+  # docker compose -f cli/compose.yaml run --rm netdebug
+  # avahi-browse -a -r
+  netdebug:
+    extends:
+      file: service.yml
+      service: base-no-network
+    build:
+      context: ./netdebug
+    container_name: netdebug
+    network_mode: host
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

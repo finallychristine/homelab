@@ -5,40 +5,10 @@ datasources:
   access: proxy
   orgId: 1
   url: http://loki.vip.bear-network
-  basicAuth: false
-  isDefault: true
-  version: 1
   editable: false
-
-- name: Home Assistant
-  type: influxdb
-  url: http://influxdb.vip.bear-network:8181
-  jsonData:
-    insecureGrpc: true
-    tlsSkipVerify: true
-    version: SQL
-    dbName: homeassistant
-  secureJsonData:
-    token: $__file{/var/run/secrets/influxdb-admin-token-text}
-
-- name: Home Assistant
-  type: influxdb
-  url: http://influxdb.vip.bear-network:8181
-  jsonData:
-    insecureGrpc: true
-    tlsSkipVerify: true
-    version: SQL
-    dbName: homeassistant
-  secureJsonData:
-    token: $__file{/var/run/secrets/influxdb-admin-token-text}
-
-- name: Telegraf
-  type: influxdb
-  url: http://influxdb.vip.bear-network:8181
-  jsonData:
-    insecureGrpc: true
-    tlsSkipVerify: true
-    version: SQL
-    dbName: telegraf
-  secureJsonData:
-    token: $__file{/var/run/secrets/influxdb-admin-token-text}
+- name: Prometheus
+  type: prometheus
+  url: http://prometheus.vip.bear-network:9090
+  access: proxy
+  isDefault: true
+  editable: false
