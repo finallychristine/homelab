@@ -20,10 +20,11 @@ template: !include ha-config/template.yaml
 
 sonos:
   media_player:
-    advertise_addr: ha.beartree.me
-    # hosts:
-    #   # appears to be the primairy controller?
-    #   - sonos-arc.iot
+    advertise_addr: 192.168.1.41
+    hosts:
+      # appears to be the primairy controller?
+      - sonos-arc.iot
+      - sonos-arc-wired.iot
 
 prometheus:
   namespace: ha

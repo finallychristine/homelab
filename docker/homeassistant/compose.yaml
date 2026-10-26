@@ -83,6 +83,9 @@ services:
       ESPHOME_DASHBOARD_USE_PING: true
     volumes:
       - esphome-data:/config
+    networks:
+      - bear-network
+      - network-discovery
 
   matter:
     extends:

@@ -20,7 +20,7 @@ rebuild: ## Builds & deploys with latest configs
 
 .PHONY: clean
 clean: ## Removes old images
-	docker image prune
+	docker image prune -a
 
 .PHONY: upgrade
 upgrade: _check_projects_variable ## Pulls images & rebuilds

@@ -9,7 +9,7 @@ services:
     extends:
       file: ../service.yml
       service: base
-    image: grafana/grafana-oss:latest
+    image: grafana/grafana:latest-slim
     hostname: grafana.vip.bear-network
     container_name: grafana
     environment:

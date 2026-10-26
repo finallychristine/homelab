@@ -7,7 +7,7 @@ services:
     extends:
       file: ../service.yml
       service: base
-    image: nginx:latest
+    image: nginx:alpine
     container_name: nginx
     hostname: nginx.vip.bear-network
     volumes:

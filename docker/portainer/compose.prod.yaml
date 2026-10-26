@@ -1,6 +1,0 @@
-services:
-  portainer:
-    environment:
-      - VIRTUAL_HOST=portainer.beartree.me
-      - VIRTUAL_PORT=443
-      - HTTPS_PROXY=portainer.beartree.me:443
